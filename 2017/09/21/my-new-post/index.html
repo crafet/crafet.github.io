@@ -69,17 +69,17 @@
 
 
 
-<meta name="description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J$是包含下标$\alpha$的，一般的写法是J\alpha就可以了。但是这">
+<meta name="description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J​$是包含下标$\alpha​$的，一般的写法是J\alpha就可以了。但">
 <meta property="og:type" content="article">
 <meta property="og:title" content="my new post">
 <meta property="og:url" content="http://yoursite.com/2017/09/21/my-new-post/index.html">
 <meta property="og:site_name" content="crafet&#39;s blog">
-<meta property="og:description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J$是包含下标$\alpha$的，一般的写法是J\alpha就可以了。但是这">
+<meta property="og:description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J​$是包含下标$\alpha​$的，一般的写法是J\alpha就可以了。但">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-21T09:29:56.796Z">
+<meta property="og:updated_time" content="2017-09-21T10:50:23.901Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="my new post">
-<meta name="twitter:description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J$是包含下标$\alpha$的，一般的写法是J\alpha就可以了。但是这">
+<meta name="twitter:description" content="new closed form $ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $ 可能的上述公式 注意上述的公式使用方法其中$J​$是包含下标$\alpha​$的，一般的写法是J\alpha就可以了。但">
 
 
 
@@ -322,7 +322,7 @@
         <p>new closed form</p>
 <p>$ J_\alpha(x) = \sum_{m=0}^\infty \frac{(-1)^m}{m! \Gamma (m + \alpha + 1)} {\left({ \frac{x}{2} }\right)}^{2m + \alpha}  $</p>
 <p>可能的上述公式</p>
-<p>注意上述的公式使用方法其中$J$是包含下标$\alpha$的，一般的写法是J<em>\alpha就可以了。但是这里的下划线”\</em>“需要转义成”\_“(这里涉及markdown的转义形式需要三个斜杠”\“，表示成\\\_，第一个来转义后面中间的斜杠，后面的斜杠来转义下划线)。</p>
+<p>注意上述的公式使用方法其中$J​$是包含下标$\alpha​$的，一般的写法是J<em>\alpha就可以了。但是这里的下划线”\</em>“需要转义成”\_“(这里涉及markdown的转义形式需要三个斜杠”\“，表示成\\\_，第一个来转义后面中间的斜杠，后面的斜杠来转义下划线)。</p>
 <p>公式没有办法渲染</p>
 <p>再尝试一个没有下标的简单公式</p>
 <p>如果写在行内的话，看这个公式 <script type="math/tex">E=mc^2</script></p>
@@ -360,6 +360,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/21/使用hexo构建支持latex的blog/" rel="prev" title="使用hexo构建支持latex的blog">
+                使用hexo构建支持latex的blog <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -426,7 +430,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -579,7 +583,24 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 
@@ -625,43 +646,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
   
 
 
