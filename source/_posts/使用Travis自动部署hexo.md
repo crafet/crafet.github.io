@@ -84,7 +84,7 @@ git branch -r
 
 travisCI的部署
 
-travisCI和github有了比较好的继承，通过github账号登陆travis就可以看到自己所有的repo，这里我们选择crafet.github.io这个repo进行自动构建。
+travisCI和github有了比较好的继承，通过github账号登陆travis就可以看到自己所有的repo，这里我们选择crafet.github.io这个repo进行自动构建，如下图所示：
 
 ![](/images/travis-select-repo.jpg)
 
@@ -151,6 +151,40 @@ git push --quiet -f https://${GitHubKEY}@github.com/${GitHubUser}/${GitHubRepo}.
 
 然后将.travis.yml以及deploy.sh文件一并提交到github。后续在_post路径下增加任何一个新的文件， travis都会自动构建并完成blog的部署。
 
+当我们提交任何一个修改，都会看到类似如下的构建
 
+![](/images/travis-build.jpg)
+
+图片使用
+
+我们在source路径下建立images，将需要引用的图片放置在这个路径下，然后通过如下的方式进行引用
+
+```shell
+![](/images/image1.jpg)
+```
+
+
+
+结论
+
+最终一个下午的折腾，重新将自动构建部署起来，接下来还需要遗留的一个问题是，引入评论系统，不过目前够用了。后续写blog的过程就比较简单，甚至可以不用安装git工具，通过web方式都可以提交article。
+
+后续准备一个简单的书写环境如下
+
+```shell
+准备一个干净的路径
+mkdir blog
+cd blog
+git clone https://github.com/crafet/crafet.github.io.git
+cd crafet.github.io
+git checkout hexo ## 切换到hexo分支下
+在./source/_post下建立新的md文件，开始新的blog书写
+如果有图片，那么需要将图片存放至source/images下，并通过 ![](/images/xxx.jpg)引用即可。
+git add *
+git commit -m":memo: push new article"
+git push
+```
+
+这样就可以完成一篇新文章的书写，然后可以关注travis的自动构建，一般都会成功构建。
 
 End.
