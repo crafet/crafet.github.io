@@ -8,10 +8,10 @@ install:
   
 script:
   - chmod +x ./deploy.sh
-  - git clone --branch v5.1.2 https://github.com/iissnan/hexo-theme-next themes/next 
+  - git clone https://github.com/iissnan/hexo-theme-next themes/next 
   - hexo clean
   - hexo g
-  - ./deploy.sh > /dev/null
+  - bash -x ./deploy.sh;
 
 branches:
   only:
