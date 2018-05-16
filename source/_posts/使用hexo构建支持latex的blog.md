@@ -1,5 +1,7 @@
 ---
 title: 使用hexo构建支持latex的blog
+date: 2018-03-11 20:12:15
+tags: ["hexo", "blog"]
 ---
 
 ## 背景
