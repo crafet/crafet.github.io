@@ -11,6 +11,8 @@ categories: "tech"
 
 最近看到travis进行blog的自动构建，发现可以很大程度上减少对部署环境的依赖，而只要聚焦在写blog上即可。因此折腾了一个下午，将travis接入自己的blog构建，本篇文章记录了这个折腾的过程，同时也记录一些自己目前还没有解决掉的问题，期望后面会逐渐优化这个过程。
 
+<!--more -->
+
 这里插入一句，一般我们使用git的时候经常会出现git对中文的处理：对0x80开头的字符进行quote，导致经常出现以下的文件展示
 
 ```shell
@@ -38,7 +40,7 @@ git config --global core.quotepath false
 
 另外看到如果post的markdown文件不是utf8编码，会在blog上显示乱码，因此在使用Typora进行书写或者其他软件进行书写，需要保存为utf8格式文件。
 
-<!--more -->
+
 
 折腾过程
 
