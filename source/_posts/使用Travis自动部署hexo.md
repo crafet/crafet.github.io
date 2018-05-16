@@ -83,6 +83,10 @@ git branch -r
   origin/hexo
   origin/master
 
+## 下述命令将本地分支推送到远程分支，相当于建立远程分支，本地叫hexo，远程也叫hexo，可以成别的名字
+git push origin hexo:hexo
+### 推送一个本地空分支，相当于删除远程分支,空格代表删除远程hexo这个分支
+git push origin :hexo
 ```
 
 travisCI的部署
