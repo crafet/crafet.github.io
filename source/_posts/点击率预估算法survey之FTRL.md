@@ -23,7 +23,7 @@ categories: tech
 
 $g = (p\_t-y\_t)x\_t$，而instance在预处理之后对应的$x_t$一般是libsvm的数据格式，即$featid:1$，所以$x_t$的值一般是1，因此这里可以等价为$g = p\_t-y\_t$。
 
-
+<!--more-->
 
 在FTRL算法中，这个是$g$是迭代的主要变量。$n,z$均是基于这个$g$进行构建。
 
@@ -43,7 +43,7 @@ RDA算法在sparsity和accuracy之间取的平衡，而google提出的FTRL算法
 
 
 
-![ftrl算法](/images/ftrl-algo.png)
+![ftrl算法](/images/ftrl-proximal-algo.jpg)
 
 一般的实现上严格按照这里的表达式进行计算即可。在具体的实践中有几个trick：
 
