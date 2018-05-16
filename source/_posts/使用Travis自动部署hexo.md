@@ -1,6 +1,6 @@
 ---
 title: 使用travis自动构建blog
-date: 2018-05-14 21:24
+date: 2018-05-14
 tags: ["travis", "自动构建", "hexo", "git"]
 categories: tech
 ---
@@ -38,7 +38,7 @@ git config --global core.quotepath false
 
 另外看到如果post的markdown文件不是utf8编码，会在blog上显示乱码，因此在使用Typora进行书写或者其他软件进行书写，需要保存为utf8格式文件。
 
-
+<!--more -->
 
 折腾过程
 

@@ -8,7 +8,7 @@ install:
   
 script:
   - chmod +x ./deploy.sh
-  - git clone https://github.com/iissnan/hexo-theme-next themes/next 
+  - git clone https://github.com/crafet/hexo-theme-next.git themes/next 
   - hexo clean
   - hexo g
   - bash -x ./deploy.sh;
