@@ -1,11 +1,10 @@
-﻿---
+---
 title: 关于模型的bais以及variance
 date: 2017-06-14
 tags: ["模型","bais","variance"]
 categories: "machine learning"
 ---
 
-##Bais与Variance 介绍##
 参与训练数据的分布为$L(x)$，而基于数据train出的model，记作$\vec{L(x)}$，基于此，在train data上进行计算预估值与实际目标的差的期望$E(\vec{L(x)}-L(x))$，这即为bais。
 > 简单的说，bais也就是经验风险误差，衡量的是model在train data上的预估与真实情况的偏差。一般来说，bais小，那么对train data拟合的越好。
 
@@ -16,9 +15,9 @@ categories: "machine learning"
 ![这里有人用打靶来描述bais以及Variance之间的关系][1]
 
 
-  [1]: https://github.com/crafet/crafet.github.io/raw/master/pics/bias_variance_targeting.jpg
-  
- 
+[1]: https://github.com/crafet/crafet.github.io/raw/master/pics/bias_variance_targeting.jpg
+
+
 靶心相当于实际应该预测的结果。在train data上low bais，那么数据都是接近靶心的。如果是high bais，那么在train data上都偏离了，就没必要在validate dataset上继续实验了。
 
 同样的，如果是low bais的前提下，再看variance，如果是low variance的，那么预测的值分布是集中的；而high Variance下预测的值是比较分散的。

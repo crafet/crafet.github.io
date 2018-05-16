@@ -2,7 +2,7 @@
 title: 使用travis自动构建blog
 date: 2018-05-14
 tags: ["travis", "自动构建", "hexo", "git"]
-categories: tech
+categories: "tech"
 ---
 
 背景

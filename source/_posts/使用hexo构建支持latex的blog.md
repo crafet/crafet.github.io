@@ -79,7 +79,7 @@ tags: ["hexo", "blog"]
 
   其中d=deploy。部署后将会要求输入git的账户密码进而提交到github上。**注意**这里我的repo配置的是https（公司内将ssh的22端口和443端口都禁掉了好像。会超时）。
 
-  ​
+  <!--more-->
 
   这样就完成了一个简单的blog构建，也可以hexo s --debug来本地进行调试(每次请求都会打印出get请求)
 
