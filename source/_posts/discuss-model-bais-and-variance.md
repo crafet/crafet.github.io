@@ -16,11 +16,9 @@ categories: "machine learning"
 ​	而Variance则是用来标识$\vec{L(x)}$自身的稳定性。采用相同的算法，不同的train data，预估出不同的$\vec{L_{1}{x}}$,$\vec{L_{2}{x}}$,.... $\vec{L_{n}{x}}$，针对同一个样本ins，计算对应的值$y_1$,$y_2$,$y_3$,...,$y_n$,那么$y$值的Variance就是model的Variance。
 
 从common sense上来说，同样算法+同样ins，计算的$y$值应该近似，此时的方差就比较少。如果$y$值忽高忽低，那么Variance就比较高了。
-目标上，我们期望能够拿到variance比较小的model。
-![这里有人用打靶来描述bais以及Variance之间的关系][1]
+目标上，我们期望能够拿到variance比较小的model，这里是用打靶场景来描述bais以及variance的关系
 
-
-[1]: https://github.com/crafet/crafet.github.io/raw/master/pics/bias_variance_targeting.jpg
+![](/images/bais-variance-relationship.jpg)
 
 
 靶心相当于实际应该预测的结果。在train data上low bais，那么数据都是接近靶心的。如果是high bais，那么在train data上都偏离了，就没必要在validate dataset上继续实验了。
@@ -40,10 +38,7 @@ categories: "machine learning"
 - 然后增加参数，即增加了模型复杂度，对train data的拟合也会越来越好，bais逐渐减少。同时high Variance也会逐渐减少。
 - 继续增加模型复杂度，比如增加更多特征，对train data的拟合更加完美，那么对实际数据的泛化能力也会逐渐减少，此时Variance会逐渐升高，即变的high Variance了。
 
-![](https://github.com/crafet/crafet.github.io/raw/master/pics/model-complexity.jpg)
-
-下图则是阐述了如何求的最佳的model，即bais和Variance都达到极小值的情况下就好。
-![](https://github.com/crafet/crafet.github.io/raw/master/pics/total_error.jpg)
+![](/images/model-complexity.jpg)
 
 因此，当bais以及Variance都变的最小时候，model 的complexity为最佳。
 
@@ -55,7 +50,7 @@ Handle underfitting and overfitting
 
 NG的课程中给出了如何处理underfitting以及overfitting的方法：
 
-![](https://github.com/crafet/crafet.github.io/raw/master/pics/handle-underfitting-overfitting.jpg)
+![](handle-underfitting-overfitting.jpg)
 
 - 首先判断在traindata上是不是high bias，如果是，那么说明拟合不够。
 1. 从common sense上来说，欠拟合有可能是迭代次数不够，没拿到最佳的w；那么可以尝试增加iteration来看看最终的w是否ok。
