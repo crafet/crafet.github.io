@@ -7,9 +7,9 @@ categories: "machine learning"
 
 背景
 
-参与训练数据的分布为$L(x)$，而基于数据train出的model，记作$\vec{L(x)}$，基于此，在train data上进行计算预估值与实际目标的差的期望$E(\vec{L(x)}-L(x))$，这即为bais。
+​	参与训练数据的分布为$L(x)$，而基于数据train出的model，记作$\vec{L(x)}$，基于此，在train data上进行计算预估值与实际目标的差的期望$E(\vec{L(x)}-L(x))$，这即为bais。
 
-> 简单的说，bais也就是经验风险误差，衡量的是model在train data上的预估与真实情况的偏差。一般来说，bais小，那么对train data拟合的越好。
+​	简单的说，bais也就是经验风险误差，衡量的是model在train data上的预估与真实情况的偏差。一般来说，bais小，那么对train data拟合的越好。
 
 <!--more-->
 
@@ -28,7 +28,12 @@ categories: "machine learning"
 同样的，如果是low bais的前提下，再看variance，如果是low variance的，那么预测的值分布是集中的；而high Variance下预测的值是比较分散的。
 因此，可以说，理想的model应该是low bais+ low variance的model。
 
-##模型复杂度##
+
+
+模型复杂度
+
+
+
 一般的，model的误差是bais以及Variance之和。如下图阐述了model逐渐增加复杂度的渐变过程。
 
 - 最初model简单，参数少，对train data也是high bais，当然如果拿来预估，基本也是high variance的。
@@ -40,9 +45,14 @@ categories: "machine learning"
 下图则是阐述了如何求的最佳的model，即bais和Variance都达到极小值的情况下就好。
 ![](https://github.com/crafet/crafet.github.io/raw/master/pics/total_error.jpg)
 
-> 当bais以及Variance都变的最小时候，model 的complexity为最佳。
+因此，当bais以及Variance都变的最小时候，model 的complexity为最佳。
 
-##handle underfitting and overfitting##
+
+
+Handle underfitting and overfitting
+
+
+
 NG的课程中给出了如何处理underfitting以及overfitting的方法：
 
 ![](https://github.com/crafet/crafet.github.io/raw/master/pics/handle-underfitting-overfitting.jpg)
@@ -54,16 +64,23 @@ NG的课程中给出了如何处理underfitting以及overfitting的方法：
 4. 考虑其他model算法。
 
 - 如果在traindata上bais上比较低，那么说明对traindata的拟合ok，那么就要看下对真实数据的predict是否ok，即看validate dataset上的Variance。如果是high Variance。那么尝试从一下几个方向来减少Variance。
-1、从common sense上来说,traindata上有比较好的表现，但是在validate data上却表现差，说明存在过拟合了，直接的结论就是模型的复杂度是不是过高了，因此可以减少模型复杂度方向上来考虑，比如增加正则化。
-2、train data太少，导致了过拟合，尝试获取更多traindata
-3、特征使用太多，尝试减少部分特征。
-4、尝试简单model算法。
+  1、从common sense上来说,traindata上有比较好的表现，但是在validate data上却表现差，说明存在过拟合了，直接的结论就是模型的复杂度是不是过高了，因此可以减少模型复杂度方向上来考虑，比如增加正则化。
+  2、train data太少，导致了过拟合，尝试获取更多traindata
+  3、特征使用太多，尝试减少部分特征。
+  4、尝试简单model算法。
 
+  
 
-##总结##
+总结
+
 总的来说，bais和Variance两个指标，其实是两个比较典型的指标，用来指导我们进行算法调优，基本的步骤就是从bais入手，确定拿到low bais的情况下再从validate dataset上调优Variance。
 
 2017.06.14
 
 参考
-$\vec {https://liam0205.me/2017/03/25/bias-variance-tradeoff/}$
+
+[1]   https://liam0205.me/2017/03/25/bias-variance-tradeoff
+
+
+
+--EOF--
