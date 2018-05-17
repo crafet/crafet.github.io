@@ -58,6 +58,8 @@ AUC的计算，需要引入confusion matrix（混淆矩阵）。
 | true positive  | false positive |       Y |
 | false negative | true negative  |       N |
 
+
+
 * true positive : 预估为正样本positive，并且预测正确true
 
 * false positive: 预估为正样本(positive)：但是预测错了(false)，即**误报**
