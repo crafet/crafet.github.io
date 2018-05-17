@@ -11,6 +11,6 @@ date: 2017-09-21 20:07:11
 
 
 
-附图为2017年4月去巴厘岛拍摄的rockbar.
+附图rockbar@bali.
 
 ![](/images/about.jpg)
