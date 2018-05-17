@@ -5,10 +5,15 @@ tags: ["模型","bais","variance"]
 categories: "machine learning"
 ---
 
+背景
+
 参与训练数据的分布为$L(x)$，而基于数据train出的model，记作$\vec{L(x)}$，基于此，在train data上进行计算预估值与实际目标的差的期望$E(\vec{L(x)}-L(x))$，这即为bais。
+
 > 简单的说，bais也就是经验风险误差，衡量的是model在train data上的预估与真实情况的偏差。一般来说，bais小，那么对train data拟合的越好。
 
-而Variance则是用来标识$\vec{L(x)}$自身的稳定性。采用相同的算法，不同的train data，预估出不同的$\vec{L_{1}{x}}$,$\vec{L_{2}{x}}$,.... $\vec{L_{n}{x}}$，针对同一个样本ins，计算对应的值$y_1$,$y_2$,$y_3$,...,$y_n$,那么$y$值的Variance就是model的Variance。
+<!--more-->
+
+​	而Variance则是用来标识$\vec{L(x)}$自身的稳定性。采用相同的算法，不同的train data，预估出不同的$\vec{L_{1}{x}}$,$\vec{L_{2}{x}}$,.... $\vec{L_{n}{x}}$，针对同一个样本ins，计算对应的值$y_1$,$y_2$,$y_3$,...,$y_n$,那么$y$值的Variance就是model的Variance。
 
 从common sense上来说，同样算法+同样ins，计算的$y$值应该近似，此时的方差就比较少。如果$y$值忽高忽低，那么Variance就比较高了。
 目标上，我们期望能够拿到variance比较小的model。
