@@ -50,7 +50,7 @@ Handle underfitting and overfitting
 
 NG的课程中给出了如何处理underfitting以及overfitting的方法：
 
-![](handle-underfitting-overfitting.jpg)
+![](/images/handle-underfitting-overfitting.jpg)
 
 - 首先判断在traindata上是不是high bias，如果是，那么说明拟合不够。
 1. 从common sense上来说，欠拟合有可能是迭代次数不够，没拿到最佳的w；那么可以尝试增加iteration来看看最终的w是否ok。
