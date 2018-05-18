@@ -14,10 +14,25 @@ categories: tech
 对于中间的hidden layer，需要的w为
 
 ```pytho
-num_input = 
+num_input = 784
 n_hidden_1 = 256
 n_hidden_2 = 256
-h1 = tf.Variable(tf.random_normal([num_input, n_hidden_1]))
+num_classes = 10
+weights = {
+'h1' : tf.Variable(tf.random_normal([num_input, n_hidden_1]))
+'h2' : tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2]))
+'out': tf.Variable(tf.random_normal([n_hidden_2, num_classes]))
+}
+## 同样需要设置bais变量
+baises = {
+    'h1': tf.Variable(tf.random_normal([n_hidden_1])),
+    'h2': tf.Variable(tf.random_normal([n_hidden_2])),
+    'out': tf.Variable(tf.random_normal([num_classes]))
+}
+
 ```
 
 <!--more-->
+
+tf.random_normal(shape, mean=.0, stddev=1.0,dtype=tf.float32,seed=None, name=None)，random_normal默认返回均值为0，方差为1的标准正态分布产生的随机数，tensor的维度以shape给出。
+
