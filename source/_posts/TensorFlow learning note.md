@@ -1,5 +1,5 @@
 ---
-title: tensorflow tutorial-1
+title: tensorflow tutorial-入门
 date: 2018-05-17
 tags: tech
 categories: [tensorflow, tutorial, machine learning]
