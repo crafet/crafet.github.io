@@ -297,3 +297,4 @@ one_loss = tf_reduce_sum(-y*tf.log(pred),1), y与pred都是tensor，所以需要
    
 ```
 
+函数tf.argmax与tf.arg_max用法相同，建议用前者，后者即将deprecated。同理，tf.argmin与tf.arg_min是一样的道理。
