@@ -249,6 +249,9 @@ W = tf.Variable(tf.zeros([784,10]))
 b = tf.Variable(tf.zeros([10]))
 
 pred = tf.n.softmax(tf.matmul(x, W) + b)
+## cost 定义，按照行来reduce计算一个instance的loss，然后全部聚合
+cost = tf.reduce_mean(-tf.reduce_sum(y *tf.log(pred), 1))
+
 optimizer = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pref), 1))
 
 init = tf.global_variables_initializer()
