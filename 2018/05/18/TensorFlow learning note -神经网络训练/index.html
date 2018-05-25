@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow,model,neural network," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从SimpleNeuralNetwork开始构建多层感知机到CNN再到LSTM，通过代码熟悉tf下DNN的模型构建方式。 构建一个包含2个隐含层hidden layers全连接网络，也即平常说的多层感知机multi layer perceptron，继续使用mnist数据集进行模型训练以及应用。 这里设置2层，每层256个神经节点neurons，输入为784dim的image，output为10">
+<meta name="keywords" content="tensorflow,model,neural network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow tutorial -神经网络模型">
+<meta property="og:url" content="http://crafet.github.io/2018/05/18/TensorFlow learning note -神经网络训练/index.html">
+<meta property="og:site_name" content="crafet&#39;s blog">
+<meta property="og:description" content="从SimpleNeuralNetwork开始构建多层感知机到CNN再到LSTM，通过代码熟悉tf下DNN的模型构建方式。 构建一个包含2个隐含层hidden layers全连接网络，也即平常说的多层感知机multi layer perceptron，继续使用mnist数据集进行模型训练以及应用。 这里设置2层，每层256个神经节点neurons，输入为784dim的image，output为10">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-25T04:03:17.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tensorflow tutorial -神经网络模型">
+<meta name="twitter:description" content="从SimpleNeuralNetwork开始构建多层感知机到CNN再到LSTM，通过代码熟悉tf下DNN的模型构建方式。 构建一个包含2个隐含层hidden layers全连接网络，也即平常说的多层感知机multi layer perceptron，继续使用mnist数据集进行模型训练以及应用。 这里设置2层，每层256个神经节点neurons，输入为784dim的image，output为10">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://crafet.github.io/2018/05/18/TensorFlow learning note -神经网络训练/"/>
+
+
+
+
+
+  <title>tensorflow tutorial -神经网络模型 | crafet's blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">crafet's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://crafet.github.io/2018/05/18/TensorFlow learning note -神经网络训练/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="crafet">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crafet's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">tensorflow tutorial -神经网络模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+00:00">
+                2018-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tech/" itemprop="url" rel="index">
+                    <span itemprop="name">tech</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/18/TensorFlow learning note -神经网络训练/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/18/TensorFlow learning note -神经网络训练/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从SimpleNeuralNetwork开始构建多层感知机到CNN再到LSTM，通过代码熟悉tf下DNN的模型构建方式。</p>
+<p>构建一个包含2个隐含层hidden layers全连接网络，也即平常说的多层感知机multi layer perceptron，继续使用mnist数据集进行模型训练以及应用。</p>
+<p>这里设置2层，每层256个神经节点neurons，输入为784dim的image，output为10 classes。</p>
+<p>对于中间的hidden layer，需要的w为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">num_input = 784</span><br><span class="line">n_hidden_1 = 256</span><br><span class="line">n_hidden_2 = 256</span><br><span class="line">num_classes = 10</span><br><span class="line">weights = &#123;</span><br><span class="line">&apos;h1&apos; : tf.Variable(tf.random_normal([num_input, n_hidden_1]))</span><br><span class="line">&apos;h2&apos; : tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2]))</span><br><span class="line">&apos;out&apos;: tf.Variable(tf.random_normal([n_hidden_2, num_classes]))</span><br><span class="line">&#125;</span><br><span class="line">## 同样需要设置bais变量</span><br><span class="line">baises = &#123;</span><br><span class="line">    &apos;h1&apos;: tf.Variable(tf.random_normal([n_hidden_1])),</span><br><span class="line">    &apos;h2&apos;: tf.Variable(tf.random_normal([n_hidden_2])),</span><br><span class="line">    &apos;out&apos;: tf.Variable(tf.random_normal([num_classes]))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>tf.random_normal(shape, mean=.0, stddev=1.0,dtype=tf.float32,seed=None, name=None)，random_normal默认返回均值为0，方差为1的标准正态分布产生的随机数，tensor的维度以shape给出。</p>
+<p>这里定义了两个隐含层，因此完整的网络结构定义如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">X = tf.placeholder([None,num_input])</span><br><span class="line">Y = tf.placehoder([num_classes])</span><br><span class="line">def whole_network(x):</span><br><span class="line">	layer1 = tf.matmul(x, weights[&quot;h1&quot;] + baises[&quot;h1&quot;]</span><br><span class="line">	layer2 = tf.matmul(layer1, weights[&quot;h2&quot;]) +b aises[&quot;h2&quot;</span><br><span class="line">	out = tf.matmul(layer2, weights[&quot;out&quot;]) + baises[&quot;out&quot;]</span><br><span class="line">	return out</span><br></pre></td></tr></table></figure>
+<p>这里定义的layer1，layer2都是隐含层，out为最后的输出层。这里我们直接将matmul</p>
+<p>的结果（是一个tensor） + 另外一个tensor；目前来看，也可以用tf.add(tensor1, tensor2)来完成相加，两者的结果应该是一样。函数whole_network以x为输入，从x开始构建隐含层，构建输出层。</p>
+<p>接下来定义pred以及loss</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">logits = whole_network(X)</span><br><span class="line">pred = tf.nn.softmax(logits)</span><br><span class="line">loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logtis, labels=Y))</span><br><span class="line"></span><br><span class="line">optimizer = tf.train.AdamOptimizer(learning_rate=learing_rate)</span><br><span class="line">train_op = optimizer.minimize(loss_op)</span><br></pre></td></tr></table></figure>
+<p>logits代表整个network，而pred则是对logits取softmax，这种情况下loss函数与上一篇中提及的loss方式有些不同，这里使用了softmax_cross_entropy_with_logits(logits,labels)，上篇中使用的loss计算方式是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss = tf.reduce_sum(-tf.reduce_sum(y * tf.log(pred), <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>其实两者的计算结果是一样的，实验如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">logits = tf.constant([[<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], [<span class="number">1.0</span>,<span class="number">2.0</span>, <span class="number">3.0</span>],[<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>]])</span><br><span class="line"><span class="comment">## logtis是一个3*3的matrix, softmax后y也是[3,3]</span></span><br><span class="line">y = tf.nn.softmax(logits)</span><br><span class="line">y_ = tf.constant([[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>],[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>],[<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>]])</span><br><span class="line"><span class="comment">## y_ 是实际的label，[3,3],cross_entropy dim: [3,1]</span></span><br><span class="line">cross_entropy = -tf.reduce_sum(y_ * tf.log(y), <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">## 上面的1指定按照每行来聚合, pre_cross dim:(3,)</span></span><br><span class="line">pre_cross = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=y_)</span><br><span class="line"><span class="comment">## 目前为止pre_cross和cross_entropy是一样的tensor，也就是softmax_cross_entropy_with_logits</span></span><br><span class="line"><span class="comment">## 降维了，从3*3到3*1，而cross_entropy则是需要自己来reduce在axis=1的维度上进行降维。</span></span><br><span class="line">cross_entropy2 = tf.reduce_sum(pre_cross)</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    softmax = sess.run(y)</span><br><span class="line">    c_e = sess.run(cross_entropy)</span><br><span class="line">    c_e2 = sess.run(cross_entropy2)</span><br><span class="line">    <span class="keyword">print</span> c_e, c_e2</span><br></pre></td></tr></table></figure>
+<p>注意的是，tf.nn.softmax_cross_entropy_with_logits(labels, logits)这个函数返回一个向量，即dim=1的tensor，首先计算softmax，保持shape不变，然后计算交叉熵，这一步\sigma(y_*log(pred))，降维到向量。</p>
+<p>相当于tf.reduce_sum(tensor，1)，对每个instance进行聚合了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+            <a href="/tags/model/" rel="tag"># model</a>
+          
+            <a href="/tags/neural-network/" rel="tag"># neural network</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/17/TensorFlow learning note -入门/" rel="next" title="tensorflow tutorial-入门">
+                <i class="fa fa-chevron-left"></i> tensorflow tutorial-入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/18/TensorFlow learning note -分布式tf/" rel="prev" title="tensorflow tutorial -分布式tf">
+                tensorflow tutorial -分布式tf <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">crafet</p>
+              <p class="site-description motion-element" itemprop="description">请坚持你的梦想</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crafet</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://crafet.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://crafet.github.io/2018/05/18/TensorFlow learning note -神经网络训练/';
+          this.page.identifier = '2018/05/18/TensorFlow learning note -神经网络训练/';
+          this.page.title = 'tensorflow tutorial -神经网络模型';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://crafet.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

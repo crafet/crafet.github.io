@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="model,ctr,auc," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景 auc的可行性计算 理论上，基于(fpr,tpr)对图形进行累积可以计算出auc，但是需要进行累加矩形面积，略显啰嗦。实际中可以采用更易计算的公式直接推导即可。一个常用的计算公式如下图所示  其中M是正样本，N是负样本个数。">
+<meta name="keywords" content="model,ctr,auc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="machine learning tutorial summary">
+<meta property="og:url" content="http://crafet.github.io/2017/06/16/machine-learning-tutorial/index.html">
+<meta property="og:site_name" content="crafet&#39;s blog">
+<meta property="og:description" content="背景 auc的可行性计算 理论上，基于(fpr,tpr)对图形进行累积可以计算出auc，但是需要进行累加矩形面积，略显啰嗦。实际中可以采用更易计算的公式直接推导即可。一个常用的计算公式如下图所示  其中M是正样本，N是负样本个数。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://crafet.github.io/images/auc-calc.jpg">
+<meta property="og:updated_time" content="2018-05-25T04:03:17.651Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="machine learning tutorial summary">
+<meta name="twitter:description" content="背景 auc的可行性计算 理论上，基于(fpr,tpr)对图形进行累积可以计算出auc，但是需要进行累加矩形面积，略显啰嗦。实际中可以采用更易计算的公式直接推导即可。一个常用的计算公式如下图所示  其中M是正样本，N是负样本个数。">
+<meta name="twitter:image" content="http://crafet.github.io/images/auc-calc.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://crafet.github.io/2017/06/16/machine-learning-tutorial/"/>
+
+
+
+
+
+  <title>machine learning tutorial summary | crafet's blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">crafet's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://crafet.github.io/2017/06/16/machine-learning-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="crafet">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crafet's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">machine learning tutorial summary</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-16T00:00:00+00:00">
+                2017-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/06/16/machine-learning-tutorial/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/06/16/machine-learning-tutorial/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>背景</p>
+<p>auc的可行性计算</p>
+<p>理论上，基于(fpr,tpr)对图形进行累积可以计算出auc，但是需要进行累加矩形面积，略显啰嗦。实际中可以采用更易计算的公式直接推导即可。一个常用的计算公式如下图所示</p>
+<p><img src="/images/auc-calc.jpg" alt=""></p>
+<p>其中M是正样本，N是负样本个数。</p>
+<a id="more"></a>
+<p>​    使用此公式的前提是instance计算pctr后按照pctr进行降序排列，然后观察所有的(正样本，负样本) 这种pair，正样本排在负样本前面。auc即使衡量在这种排序下，正样本排在负样本前面的比例有多少，按照概率的定义，当样本足够多的情况下，这种比例值即是概率的值。</p>
+<p>当所有正样本都排在所有负样本的前面时候，那么此时排列是最理想的，此时auc应该是1.0</p>
+<p>对于n个样本的ins，定义第一个样本的rank为n，那么第二个样本的rank就n-1，那么正样本排在负样本这种pair的个数就是$$\Sigma{正样本rank值} - (正样本，正样本)个数$$</p>
+<p>对于M个正样本来说，第一个正样本与后面的每个正样本组合，形成M-1个;对于第二个正样本来说，与后面的每个正样本形成M-2个组合，依此类推…，总共形成的（正样本，正样本）的个数为$$(M-1)+(M-2)+…+(1)$$</p>
+<p>如基于如下instance计算后的pctr数据</p>
+<table>
+<thead>
+<tr>
+<th>pctr</th>
+<th>y</th>
+<th>rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.95</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>0.81</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>0.75</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>其中M=2，N=3，n=M+N = 5,<br>正样本的rank之和计算为：</p>
+<p>$$\sum{正样本rank}$$</p>
+<p>$\sum{正样本rank}$</p>
+<p>其中<br>$\frac{2(2+1)}{2} = 3$<br>计算出其$auc = \frac{8-3}{3*2}$<br>即$\frac{5}{6}$ = 0.8333。</p>
+<p>如果不同score会依次给出一个rank值，如果score值相同，那么rank值也给予相同的值。</p>
+<p>$$<br>  \begin{matrix}<br>   1 &amp; 2 &amp; 3 \\<br>   4 &amp; 5 &amp; 6 \\<br>   7 &amp; 8 &amp; 9<br>  \end{matrix} \tag{1}<br>$$</p>
+<p>$$<br>\begin{equation}<br>\begin{bmatrix}<br>1 &amp; 2 &amp; 3 \\<br>4 &amp; 5 &amp; 6 \\<br>7 &amp; 8 &amp; 9<br>\end{bmatrix}+<br>\begin{bmatrix}<br>10 &amp; 11 &amp; 12 \\<br>13 &amp; 14 &amp; 15 \\<br>16 &amp; 17 &amp; 18<br>\end{bmatrix}=<br>\begin{bmatrix}<br>11 &amp; 13 &amp; 15 \\<br>17 &amp; 19 &amp; 21 \\<br>23 &amp; 25 &amp; 27<br>\end{bmatrix}<br>\end{equation}<br>$$</p>
+<p>附一段最近在使用的计算auc的scala代码</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calcAUC</span></span>(f : scala.collection.<span class="type">Iterable</span>[( <span class="type">String</span>,<span class="type">Array</span>[<span class="type">Double</span>] )]) : <span class="type">Double</span> = &#123;</span><br><span class="line">  <span class="keyword">var</span> auc = <span class="number">0.0</span> </span><br><span class="line">  <span class="keyword">val</span> tuples = <span class="keyword">new</span> <span class="type">ArrayBuffer</span>[(<span class="type">Double</span>,<span class="type">Array</span>[<span class="type">Double</span>])];</span><br><span class="line">  <span class="keyword">val</span> tuples2 = <span class="keyword">new</span> <span class="type">ArrayBuffer</span>[(<span class="type">Double</span>,<span class="type">Array</span>[<span class="type">Double</span>])];</span><br><span class="line">  f.foreach(x =&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> ctr:<span class="type">Double</span> =  x._2(<span class="number">0</span>)</span><br><span class="line">    tuples += ((ctr,<span class="type">Array</span>(x._2(<span class="number">1</span>),x._2(<span class="number">2</span>))))</span><br><span class="line">  &#125;)</span><br><span class="line">  tuples.groupBy(_._1).map(x =&gt; &#123;</span><br><span class="line">    <span class="keyword">var</span> sum_1 = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">var</span> sum_2 = <span class="number">0.0</span></span><br><span class="line">    x._2.foreach(f=&gt;&#123;</span><br><span class="line">      sum_1 += f._2(<span class="number">0</span>)</span><br><span class="line">      sum_2 += f._2(<span class="number">1</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    tuples2 += ((x._1,<span class="type">Array</span>(sum_1,sum_2)))</span><br><span class="line">    &#125;)</span><br><span class="line">  <span class="keyword">var</span> last_tp = <span class="number">0.0</span></span><br><span class="line">  <span class="keyword">var</span> last_fp = <span class="number">0.0</span></span><br><span class="line">  tuples2.sortBy(f =&gt; f._1)(<span class="type">Ordering</span>[<span class="type">Double</span>].reverse).foreach( f =&gt; &#123;</span><br><span class="line">    <span class="keyword">val</span> tp = f._2(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">val</span> fp = f._2(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">val</span> delta_x = fp </span><br><span class="line">    <span class="keyword">val</span> delta_y = tp</span><br><span class="line">    auc += (last_tp*<span class="number">2</span> + delta_y)*delta_x*<span class="number">0.5</span></span><br><span class="line">    last_tp += delta_y</span><br><span class="line">    last_fp += delta_x</span><br><span class="line">  &#125;)</span><br><span class="line">  auc = auc/(last_tp*last_fp)</span><br><span class="line">  <span class="keyword">return</span> auc</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里进行简答的说明</p>
+<ol>
+<li><p>input接受的是一个List，其中每个元素都是一个包含三个元素的tuple，组成形式为 tuple(ctr, click, noclick)</p>
+</li>
+<li><p>其中tuple的ctr是按照相同ctr进行过聚合，然后进行倒排，也就是代码中的reverse</p>
+</li>
+<li><p>在二维的XY轴中，以fp作为x轴，以tp作为y轴，delta_x表示当前的nonclick，delta_y表示当前的click数值，这样绘制图形，每个ctr都会绘制出一个包含三角形+一个矩形的形状</p>
+</li>
+<li><p>计算这个形状的面积 = 三角形面积 + 矩形面积：其中矩形面积是</p>
+<p>矩形 = dealt_x * last_tp</p>
+<p>三角形面积 = dealt_x <em> delta_y </em> 0.5</p>
+<p>合并两个面积和 = (2<em>last_tp + delta_y) </em> delta_x <em> 0.5，而总面积是last_fp </em> last_tp，前者除以后者就是roc线下的面积，也就是auc的数值。</p>
+</li>
+</ol>
+<p>–EOF –</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/model/" rel="tag"># model</a>
+          
+            <a href="/tags/ctr/" rel="tag"># ctr</a>
+          
+            <a href="/tags/auc/" rel="tag"># auc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/14/discuss-model-bais-and-variance/" rel="next" title="关于模型的bais以及variance">
+                <i class="fa fa-chevron-left"></i> 关于模型的bais以及variance
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/18/libev-tutorial/" rel="prev" title="基于libev的网络服务框架">
+                基于libev的网络服务框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">crafet</p>
+              <p class="site-description motion-element" itemprop="description">请坚持你的梦想</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crafet</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://crafet.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://crafet.github.io/2017/06/16/machine-learning-tutorial/';
+          this.page.identifier = '2017/06/16/machine-learning-tutorial/';
+          this.page.title = 'machine learning tutorial summary';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://crafet.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
